@@ -11,19 +11,38 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-
-      - uses: subosito/flutter-action@v2
+      - name: Checkout
+        uses: actions/checkout@v4
         with:
-          flutter-version: stable
+          fetch-depth: 0
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.24.0'
           channel: stable
+          cache: true
 
-      - run: flutter pub get
-      - run: flutter config --enable-web
-      - run: flutter build web --release --base-href=/api_check/
-      - run: cp build/web/index.html build/web/404.html
+      - name: Flutter version
+        run: flutter --version
 
-      - uses: peaceiris/actions-gh-pages@v3
+      - name: Flutter doctor
+        run: flutter doctor -v
+
+      - name: Enable web
+        run: flutter config --enable-web
+
+      - name: Pub get
+        run: flutter pub get
+
+      - name: Build web
+        run: flutter build web --release --base-href=/api_check/
+
+      - name: Add 404 for SPA refresh
+        run: cp build/web/index.html build/web/404.html
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./build/web
