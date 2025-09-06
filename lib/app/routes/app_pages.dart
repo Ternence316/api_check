@@ -14,6 +14,12 @@ class AppPages {
   static const initial = Routes.login;
 
   static final routes = <GetPage<dynamic>>[
+    // Map root path '/' to login so opening '#/' loads login page on web
+    GetPage(
+      name: '/',
+      page: () => const LoginView(),
+      binding: LoginBinding(),
+    ),
     GetPage(
       name: Routes.login,
       page: () => const LoginView(),
