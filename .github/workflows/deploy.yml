@@ -36,7 +36,7 @@ jobs:
         run: flutter pub get
 
       - name: Build web
-        run: flutter build web --release --base-href=/api_check/
+        run: flutter build web --release --base-href=/api_check/ --pwa-strategy=none
 
       - name: Add 404 for SPA refresh
         run: cp build/web/index.html build/web/404.html
